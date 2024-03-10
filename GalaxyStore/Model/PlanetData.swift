@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+struct PlanetData: Codable {
+    var data: [PlanetModel]
+}

@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+protocol FileStorageManaging {
+    func saveFile(fileName: String, fileData: Data)
+    func loadFileFromDiskWith(fileName: String) -> URL?
+}

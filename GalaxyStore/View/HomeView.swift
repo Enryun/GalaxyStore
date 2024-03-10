@@ -12,9 +12,11 @@ import SwiftData
 
 struct HomeView: View {
     
-    @Query var recipes: [PlanetModelPersistence]
+    @Query(sort: \PlanetModelPersistence.index, order: .forward) var planets: [PlanetModelPersistence]
     @Environment(\.modelContext) private var modelContext
-    let columns: [GridItem] = Array(repeating: GridItem(.flexible(), spacing: 16), count: 4)
+    @Environment(FileStorageManager.self) private var fileManager: FileStorageManager
+    private let columns: [GridItem] = Array(repeating: GridItem(.flexible(), spacing: 16), count: 4)
+    @State private var viewModel = HomeViewModel()
     
     var body: some View {
         NavigationStack {
@@ -35,13 +37,12 @@ struct HomeView: View {
                             .padding(.bottom)
                         
                         LazyVGrid(columns: columns, spacing: 16) {
-                            ForEach(defaultCards) { card in
+                            ForEach(planets) { planet in
                                 VStack(spacing: 24) {
-                                    Image(card.name, bundle: .main)
-                                        .resizable()
-                                        .aspectRatio(1, contentMode: .fit)
-                                    NavigationLink(value: card) {
-                                        Text(card.name)
+                                    ImageWithCache(planet: planet)
+                                    
+                                    NavigationLink(value: planet) {
+                                        Text(planet.name)
                                             .font(.title)
                                             .fontWeight(.semibold)
                                             .foregroundStyle(.primary)
@@ -57,27 +58,24 @@ struct HomeView: View {
                         .padding()
                     }
                 }
-                .navigationDestination(for: PlanetModel.self, destination: { card in
-                    PlanetDetailView(card: card)
+                .navigationDestination(for: PlanetModelPersistence.self, destination: { card in
+                    PlanetDetailView(planet: card)
                 })
             }
             .padding()
         }
-        .onAppear {
-            
-        }
-    }
-    
-    private func saveLocalSwiftData() {
-        for card in defaultCards {
-            let persistedCard = PlanetModelPersistence(name: card.name, fact: card.fact)
-            modelContext.insert(persistedCard)
-        }
-
-        do {
-            try modelContext.save()
-        } catch {
-            
+        .onLoad {
+            do {
+                let planetsData = try viewModel.fetchAllPlanets()
+                try modelContext.delete(model: PlanetModelPersistence.self, includeSubclasses: true)
+                for (index, planet) in planetsData.enumerated() {
+                    viewModel.fakeFetchImageAndSaveLocalData(planet: planet, fileManager: fileManager)
+                    let persistedCard = PlanetModelPersistence(name: planet.name, index: index, fact: planet.fact)
+                    modelContext.insert(persistedCard)
+                }
+            } catch {
+                print(error.localizedDescription)
+            }            
         }
     }
 }
@@ -85,35 +83,3 @@ struct HomeView: View {
 #Preview(windowStyle: .automatic) {
     HomeView()
 }
-
-
-
-
-//Model3D(named: defaultCards[index].name) { model in
-//    model
-//        .resizable()
-//        .aspectRatio(1, contentMode: .fit)
-//} placeholder: {
-//    ProgressView()
-//}
-
-//Model3D(named: defaultCards[index].name) { model in
-//    model
-//        .resizable()
-//        .aspectRatio(1, contentMode: .fit)
-//} placeholder: {
-//    ProgressView()
-//}
-
-//            .toolbar {
-//                ToolbarItem(placement: .navigationBarTrailing) {
-//                    Menu {
-//                        Button("Option 1") { print("Option 1 selected") }
-//                        Button("Option 2") { print("Option 2 selected") }
-//                        Button("Option 3") { print("Option 3 selected") }
-//                    } label: {
-//                        Label("Menu", systemImage: "ellipsis.circle")
-//                    }
-//                }
-//            }
-

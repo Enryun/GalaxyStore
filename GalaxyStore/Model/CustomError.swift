@@ -12,3 +12,4 @@ enum LoadJsonError: Error {
     case CannotLoad
     case CannotParse
 }
+

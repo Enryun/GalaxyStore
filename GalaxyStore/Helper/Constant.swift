@@ -6,3 +6,14 @@
 //
 
 import Foundation
+
+struct Constant {
+    enum WindowId {
+        static let planetWindowId = "PlanetModel3DVolumeID"
+    }
+    
+    enum FileType {
+        static let png = "png"
+        static let usdz = "usdz"
+    }
+}

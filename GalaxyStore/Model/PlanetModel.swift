@@ -6,35 +6,15 @@
 //
 
 import Foundation
-import SwiftData
 
-@Model
-class PlanetModelPersistence: Identifiable, Equatable {
-    @Attribute(.unique) var id: String
+struct PlanetModel: Identifiable, Equatable, Hashable, Codable {
+    var id: String
     var name: String
     var fact: String
+    var imageUrl: String
+    var assetUrl: String
     
-    init( name: String, fact: String) {
-        self.id = UUID().uuidString
-        self.name = name
-        self.fact = fact
+    var localImageURL: String {
+        return self.id + "." + Constant.FileType.png
     }
 }
-
-struct PlanetModel: Identifiable, Equatable, Hashable {
-    var id: UUID = UUID()
-    var name: String
-    var fact: String
-}
-
-var defaultCards: [PlanetModel] = [
-        PlanetModel(name: "Mercury", fact: "Mercury is the smallest planet in the Solar System and the closest planet to the Sun. It has a diameter of approximately 4,880 km and is similar in appearance to our Moon, with a heavily cratered surface and few signs of geological activity. Mercury has a very thin atmosphere, which is not capable of retaining heat and is largely composed of oxygen, sodium, and hydrogen. The planet has no moons or rings. Mercury is unique among the planets in that it has a very elliptical orbit and rotates very slowly on its axis, meaning that one day on Mercury lasts approximately 176 Earth days. This, combined with its proximity to the Sun, means that Mercury experiences extreme temperature swings, with temperatures on its surface reaching over 430°C when it is closest to the Sun and dropping to below -170°C when it is farthest away. Despite its small size, Mercury has played an important role in our understanding of the Solar System, and several missions have been sent to study the planet up close, including the MESSENGER mission, which orbited Mercury from 2011 to 2015."),
-        PlanetModel(name: "Venus", fact: "Venus is the second planet from the Sun and is often referred to as Earth's 'sister planet'. It has a diameter of approximately 12,104 km and is similar in size, mass, and composition to Earth. Venus has a thick, toxic atmosphere composed primarily of carbon dioxide and nitrogen, with clouds of sulfuric acid. This thick atmosphere creates a greenhouse effect, which makes Venus the hottest planet in the solar system, with temperatures on its surface reaching over 450°C. Venus has a history of volcanic activity, with many large volcanoes and extensive lava flows on its surface. The planet has no moons or rings, and its slow rotation rate means that one day on Venus lasts longer than one year on the planet. Despite its similarities to Earth, the harsh environment on Venus makes it unlikely that it could support life as we know it."),
-        PlanetModel(name: "Earth", fact: "Earth is the third planet from the Sun and the only known planet to support life. It has a diameter of approximately 12,742 km and is composed primarily of rock and metal. The Earth has a dense atmosphere that protects life on the planet and helps regulate the surface temperature. It has a magnetic field that protects the planet from harmful solar and cosmic radiation. The planet is approximately 4.54 billion years old and has a diverse array of habitats, including oceans, forests, deserts, and tundras. Life on Earth has evolved over millions of years, leading to the development of diverse species, including humans."),
-        PlanetModel(name: "Moon", fact: "The Moon is the Earth's only natural satellite and the fifth largest moon in the Solar System. It has a diameter of approximately 3,476 km and is approximately one-quarter the size of Earth. The Moon is believed to have formed about 4.5 billion years ago, likely as a result of a Mars-sized object colliding with Earth. It has a heavily cratered, lifeless surface with a very thin atmosphere. The Moon has no permanent water on its surface, but evidence of frozen water in the form of ice has been found in some craters near its poles. The Moon has been extensively studied and explored, starting with the Apollo missions in the late 1960s and early 1970s, which sent astronauts to the Moon for the first time. The Moon is also a target for future exploration, with plans for a permanent human presence being considered by several countries and private companies."),
-        PlanetModel(name: "Mars", fact: "Mars is the fourth planet from the Sun and is often referred to as the 'Red Planet'. It has a diameter of approximately 6,787 km and is a rocky, desert-like world with a thin atmosphere. Mars has the largest volcano (Olympus Mons) and the deepest canyon (Valles Marineris) in the solar system. The planet has a weak magnetic field, which allows it to lose its atmosphere to space. Mars has a history of water on its surface, as evidenced by dry riverbeds and valleys, and it is believed that liquid water may exist below the surface. In recent years, Mars has been the subject of intense study and exploration, both by space-faring nations and private organizations, with the goal of one day establishing a human settlement on the planet."),
-        PlanetModel(name: "Jupiter", fact: "Jupiter is the fifth planet from the Sun and the largest planet in the Solar System. It has a diameter of approximately 139,822 km and is primarily composed of hydrogen and helium gas. Jupiter has a strong magnetic field that generates intense radiation belts, making it the largest source of radiation in the solar system. The planet is famous for its Great Red Spot, a massive storm that has raged for at least 400 years. Jupiter has 79 known moons, the largest of which is Ganymede, which is larger than the planet Mercury. Jupiter played a crucial role in the evolution of the solar system, as its massive size helped prevent other objects from coming together to form a planet in the region where it now resides, and it may have played a role in the formation of the outer planets."),
-        PlanetModel(name: "Saturn", fact: "Saturn is the sixth planet from the Sun and is the second largest planet in the Solar System, after Jupiter. It has a diameter of approximately 116,460 km and is primarily composed of hydrogen and helium gas. Saturn is best known for its stunning system of rings, which are made up of ice and rock particles and are thought to be the result of the breakup of one or more moons. The planet has 82 known moons, the largest of which is Titan, which is the second largest moon in the Solar System and is of great scientific interest due to its dense atmosphere and possible oceans of liquid methane. Saturn has a relatively weak magnetic field and a very active weather system, with storms and clouds similar to those seen on Jupiter. Saturn played a crucial role in the evolution of the Solar System, as its massive size helped shape the orbits of the other planets and influenced the formation of the inner Solar System."),
-        PlanetModel(name: "Neptune", fact: "Neptune is the eighth and furthest planet from the Sun in our Solar System. It has a diameter of approximately 49,244 km and is composed primarily of hydrogen, helium, and methane gas. Neptune has a strong, blue-colored atmosphere that is thought to be the result of the presence of methane gas, which absorbs red light and reflects blue light. The planet has 14 known moons, the largest of which is Triton, which is thought to be a captured Kuiper Belt object. Neptune has a very active weather system, with large storms, winds, and clouds, as well as the fastest winds of any planet in the solar system, reaching speeds of over 2,000 km/hr. It is also the only planet in our solar system that was not discovered using naked-eye observations, and was instead predicted mathematically before it was observed."),
-    ]
-
